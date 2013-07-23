@@ -1,0 +1,19 @@
+{
+  "name": "node-sights",
+  "version": "0.0.1",
+  "description": "node.js demo application for nearby sights",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/janpetzold/node-sights"
+  },
+  "keywords": [
+    "node.js",
+    "sights"
+  ],
+  "author": "Jan Petzold",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/janpetzold/node-sights/issues"
+  }
+}
