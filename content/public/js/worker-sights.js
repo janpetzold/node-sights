@@ -1,22 +1,18 @@
+// TODO: This does not work. Fetch the sights-data via AJAX in the client and use this to parse and sort the data.
+
 var sightsUrl = 'http://overpass-api.de/api/interpreter?data=[out:json];node[tourism](:MINLAT,:MINLNG,:MAXLAT,:MAXLNG);out;';
 
 function init(e) {
 	var geoUrl = sightsUrl.replace(':MINLAT', e.data[0]).replace(':MINLNG', e.data[1]).replace(':MAXLAT', e.data[2]).replace(':MAXLNG', e.data[3]);
 
-	self.postMessage(geoUrl);
-
-	/*
 	// get the sights data from Overpass
 	xhrLoad(geoUrl, function(xhr) {
-		var result = xhr.responseText;	
-
-		// return the JSON object what we got
-		self.postMessage(result);
+		// return the response what we got
+		self.postMessage(xhr.responseText);
 
 		// Close the worker
 		self.close();
 	})
-	*/
 }
 
 function xhrLoad(url, callback) {
