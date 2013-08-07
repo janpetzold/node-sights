@@ -42,9 +42,11 @@ function setMap(latitude, longitude) {
 	mapBoundingBox = [map.getBounds().getSouthWest().lat, map.getBounds().getSouthWest().lng, map.getBounds().getNorthEast().lat, map.getBounds().getNorthEast().lng];
 	// console.log("Bounding box: " + mapBoundingBox);
 
+	/*
 	var sightsUrl = 'http://overpass-api.de/api/interpreter?data=[out:json];node[tourism](:MINLAT,:MINLNG,:MAXLAT,:MAXLNG);out;';
 	sightsUrl = sightsUrl.replace(':MINLAT', mapBoundingBox[0]).replace(':MINLNG', mapBoundingBox[1]).replace(':MAXLAT', mapBoundingBox[2]).replace(':MAXLNG', mapBoundingBox[3]);
 	console.log(sightsUrl);
+	*/
 	
 	var marker = L.marker([latitude, longitude]).addTo(map);
 
@@ -60,12 +62,14 @@ function getSights(latitude, longitude, mapBoundingBox) {
 	*/
 
 	// fetch sights from server
-	console.log("Fetching nearby sights from server - bounding box: " + mapBoundingBox);
+	// console.log("Fetching nearby sights from server - bounding box: " + mapBoundingBox);
+
 	$.ajax({
-		type: "GET",
-		url: "http://overpass-api.de/api/interpreter?data=[out:json];(node[historic](51.51346558530626,13.394941091537476,52.51993564618898,13.40506911277771);node[tourism](51.51346558530626,13.394941091537476,52.51993564618898,13.40506911277771);node[amenity=theatre](51.51346558530626,13.394941091537476,52.51993564618898,13.40506911277771);node[amenity=townhall](51.51346558530626,13.394941091537476,52.51993564618898,13.40506911277771);node[amenity=marketplace](51.51346558530626,13.394941091537476,52.51993564618898,13.40506911277771);node[amenity=place_of_worship](51.51346558530626,13.394941091537476,52.51993564618898,13.40506911277771);node[shop=art](51.51346558530626,13.394941091537476,52.51993564618898,13.40506911277771);node[shop=craft](51.51346558530626,13.394941091537476,52.51993564618898,13.40506911277771););out;",
+		type: "POST",
+		url: "/fetchSights",
+		data: {boundingBox : mapBoundingBox},
 		success: function(data){
-			console.log(data);
+			console.log(JSON.parse(data));
 		}
 	});
 
@@ -82,7 +86,7 @@ L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 var worker = new Worker('js/worker-sights.js');
 
-// add event listeneer to WebWorker
+// add event listener to WebWorker
 worker.addEventListener('message', onMsg, false);
 worker.addEventListener('error', onError, false);
 
@@ -94,4 +98,3 @@ var t = window.setTimeout(checkGeoPosition, 2000);
 
 // start the worker
 console.log("Sending the coordinates...");
-

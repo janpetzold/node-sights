@@ -1,30 +1,27 @@
-// TODO: This does not work. Fetch the sights-data via AJAX in the client and use this to parse and sort the data.
+var xmlHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+// TODO: put this into the client as well!
+function constructUrl(box) {
+	var url = "http://overpass-api.de/api/interpreter?data=[out:json];(:PLACEHOLDER);out;";
 
-function getSights(boundingBox) {
-	console.log("Fetching the sights from server - bounding box is " + boundingBox);
+	// use the following POI types
+	// for details, see http://wiki.openstreetmap.org/wiki/Map_Features
+	var sightTypes = ["historic", "tourism", "amenity=theatre", "amenity=townhall", "amenity=marketplace", "amenity=place_of_worship", "shop=art", "shop=craft"];
 
-	var sightsUrl = 'http://overpass-api.de/api/interpreter?data=[out:json];node[tourism](:MINLAT,:MINLNG,:MAXLAT,:MAXLNG);out;';
-	var geoUrl = sightsUrl.replace(':MINLAT', boundingBox[0]).replace(':MINLNG', boundingBox[1]).replace(':MAXLAT', boundingBox[2]).replace(':MAXLNG', boundingBox[3]);
-
-	xhrLoad(geoUrl, function(xhr) {
-		console.log("DATA");
-		return xhr.responseText;
-	});
-
-	console.log("DONE");
-}
-
-function sightsFetched(data) {
-
+	// construct the URL based on the boundingBox
+	var allGeoSights = "";
+	for(var type in sightTypes) {
+		allGeoSights = allGeoSights + "node[" + sightTypes[type] + "](" + box[0] + "," + box[1] + "," + box[2] + "," + box[3] +");";
+	}
+	
+	return url.replace(":PLACEHOLDER", allGeoSights);
 }
 
 function xhrLoad(url, callback) {
 	var xhr;
 
-	if(typeof XMLHttpRequest !== 'undefined') {
-		xhr = new XMLHttpRequest();
+	if(typeof xmlHttpRequest !== 'undefined') {
+		xhr = new xmlHttpRequest();
 	} else {
 		var versions = ["MSXML2.XmlHttp.5.0",
 			"MSXML2.XmlHttp.4.0",
@@ -52,7 +49,6 @@ function xhrLoad(url, callback) {
 		} 
 		// all is well
 		if(xhr.readyState === 4) {
-			console.log("XHR successful");
 			callback(xhr);
 		}	
 	}
@@ -61,4 +57,5 @@ function xhrLoad(url, callback) {
 	xhr.send('');
 }
 
-exports.getSights = getSights;
+exports.constructUrl = constructUrl;
+exports.xhrLoad = xhrLoad;
