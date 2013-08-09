@@ -1,0 +1,29 @@
+<html>
+<head>
+	<title>node-sights</title>
+	<meta name="description" content="Small node.js sample application that displays a map based on the users position and shows some sights that are around him/her" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="author" content="Jan Petzold" />
+</head>
+<body>
+	<!-- The placeholder for the actual map m-->
+	<div id="map" />
+
+	<div id="statistics">
+		<span id="ipStats">IP: </span>
+		<span id="geoStats">Geolocation: </span>
+		<span id="wwStats">WebWorker: </span>
+	</div>
+
+	<link rel="stylesheet" href="css/leaflet/leaflet.css" />
+ 	<!--[if lte IE 8]>
+    	<link rel="stylesheet" href="css/leaflet/leaflet.ie.css" />
+ 	<![endif]-->
+
+ 	<link rel="stylesheet" href="css/client.css" />
+ 	
+ 	<script type="text/javascript" src="js/lib/leaflet.js"></script>
+ 	<script type="text/javascript" src="js/lib/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="js/client.js"></script>
+</body>
+</html>

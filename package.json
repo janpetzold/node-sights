@@ -7,6 +7,14 @@
     "type": "git",
     "url": "https://github.com/janpetzold/node-sights"
   },
+  "dependencies": {
+    "express": "3.3.4",
+    "geoip-lite": "1.0.10",
+    "jade": "0.33.0",
+    "nodemon": "0.7.8",
+    "underscore": "1.5.1",
+    "xmlhttprequest": "1.6.0"
+  },
   "keywords": [
     "node.js",
     "sights"
