@@ -30,6 +30,9 @@ function getCity(latitude, longitude, callback) {
 
 		var collection = db.collection('cities');
 		collection.find(query).sort({Population : -1}).limit(1).toArray(function(err, city) {
+			// make sure there is a 2D index on the Location column
+			collection.ensureIndex({loc : "2d" });
+			
 			var result = {
 				name : city[0]['AccentCity'],
 				population : city[0]['Population']
