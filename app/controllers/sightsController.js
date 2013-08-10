@@ -1,5 +1,4 @@
-var sights = require('./../modules/sights');
-var _ = require('underscore');
+var sights = require('./../client/js/modules/sights');
 
 // Some helper functions to benchmark execution time
 var startBench = function() {
@@ -30,42 +29,9 @@ exports.getSights = function(req, res){
   var serviceUrl = sights.constructUrl(boundingBox);
   //console.log("Service-URL is " + serviceUrl);
 
-  var sightsArray = [];
-
-  sights.xhrLoad(serviceUrl, function(xhr) {
-	// console.log(xhr.responseText);
-	var result = [];
+  sights.fetchData(serviceUrl, function(xhr) {
+	var result = sights.processResult(xhr.responseText);
 	
-	var elements = JSON.parse(xhr.responseText)['elements'];
-	console.log("Insgesamt " + elements.length + " Elemente");
-	
-
-	for(i = 0; i < elements.length; i++) {
-		// If there is an English name, take this one instead the default.
-		if(elements[i]['tags'].hasOwnProperty('name:en')) {
-			elements[i]['tags']['name'] = elements[i]['tags']['name:en'];
-		}
-
-		var relevance = _.size(elements[i]['tags']);
-
-		// construct a new item based on the Overpass API JSON data
-		var item = {
-			relevance: relevance,
-			lat: elements[i]['lat'],
-			lon: elements[i]['lon'],
-			name: elements[i]['tags']['name']
-		};
-
-		result.push(item);
-	}
-
-	// sort descending
-	result.sort(compare);
-
-	// limit array to 30 entries
-	result = result.splice(result, 30);
-
-	//console.log(result);
 	stopBench(time, "fetchSightsViaOverpass");
 
 	res.send(result);

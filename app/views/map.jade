@@ -8,14 +8,17 @@ html(lang="en")
     meta(viewport="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
 
   body
+
     // placeholder for the actual map
     #map
 
+    // welcome message
+    #textBoxContainer
+      #textBox
+        span(id="welcomeMsg") #{msg}
+
     // loading indicator
     img(id="loadingIndicator", src="assets/images/loader.gif", width="110", height="110", alt="Loading data...", title="Loading data...")
-
-    // welcome message
-    p #{msg}
 
     #statistics
       p(class="stats") IP: 

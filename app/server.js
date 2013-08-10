@@ -7,7 +7,7 @@ var sightsController = require('./controllers/sightsController');
 
 // load my modules
 var geo = require('./modules/geo');
-var sights = require('./modules/sights');
+var sights = require('./client/js/modules/sights');
 
 var app = express();
 
@@ -36,6 +36,12 @@ app.get('/', function (req, res) {
 
 app.get('/fetchPosition', function (req, res) {
 	res.send(geo.getGeoCoordinates(req));
+});
+
+app.get('/getCity', function (req, res) {
+	geo.getCity(req.query.latitude, req.query.longitude, function(city) {
+		res.send(city);
+	});
 });
 
 // this one is more complex so we use a dedicated controller
