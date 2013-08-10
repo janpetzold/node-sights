@@ -50,6 +50,8 @@ app.post('/fetchSights', function (req, res) {
 });
 
 // initialize app
-var port = process.env.PORT || 80;
+var ip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+var port = process.env.OPENSHIFT_NODEJS_PORT || '80';
+
 app.listen(port);
-console.log("Listening on port " + port);
+console.log("IP is " + ip + ", port " + port);

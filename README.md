@@ -36,11 +36,16 @@ Install RHC (OpenShift command-line tools): https://www.openshift.com/developers
 
 Setup will guide you through authentication and generates an SSH key.
 
+rhc create-app nodesights nodejs-0.6 --from-code=https://github.com/janpetzold/node-sights.git
+
+See some details:
+rhc show-app nodesights
+
 Afterwards, connect via SSH.
 
-To find out host and port of mongo, run this command:
+To find out host and port of mongo, run this command on the shell:
 
-lsof -iTCP -sTCP:LISTEN | grep mongo
+env
 
 Than you'll know the address and port mongo works with.
 To import the data, run this:
