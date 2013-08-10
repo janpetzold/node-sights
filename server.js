@@ -51,7 +51,7 @@ app.post('/fetchSights', function (req, res) {
 
 // initialize app
 var port = process.env.OPENSHIFT_NODEJS_PORT ||  process.env.OPENSHIFT_INTERNAL_PORT || 80;
-var ipaddr = process.env.OPENSHIFT_NODEJS_IP || process.env.OPENSHIFT_INTERNAL_IP || '127.0.0.1';
+var ip = process.env.OPENSHIFT_NODEJS_IP || process.env.OPENSHIFT_INTERNAL_IP || '127.0.0.1';
 
 console.log("IP is " + ip + ", port " + port);
 

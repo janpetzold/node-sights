@@ -5,16 +5,13 @@ var MongoClient = require('mongodb').MongoClient;
 var dbHost = "127.0.0.1";
 var dbPort = "27017";
 
-if(typeof $OPENSHIFT_MONGODB_DB_HOST !== 'undefined') {
-	dbHost = $OPENSHIFT_MONGODB_DB_HOST;
-}
-
-if(typeof $OPENSHIFT_MONGODB_DB_PORT !== 'undefined') {
-	dbPort = $OPENSHIFT_MONGODB_DB_PORT;
-}
-
-console.log("Using DB host " + dbHost + " on port " + dbPort);
 var mongoConnectString = "mongodb://" + dbHost + ":" + dbPort + "/geo";
+
+if(typeof process.env.OPENSHIFT_MONGODB_DB_URL !== 'undefined') {
+	mongoConnectString = process.env.OPENSHIFT_MONGODB_DB_URL + "/geo";
+}
+
+console.log("Connect string to Mongo is " + mongoConnectString);
 
 function getGeoCoordinates(req) {
 	var ip = req.ip;
