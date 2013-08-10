@@ -34,6 +34,8 @@ Connection URL: mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/
 
 Install RHC (OpenShift command-line tools): https://www.openshift.com/developers/rhc-client-tools-install
 
+Setup will guide you through authentication and generates an SSH key.
+
 Afterwards, connect via SSH.
 
 To find out host and port of mongo, run this command:
@@ -45,4 +47,7 @@ To import the data, run this:
 
 mongoimport --host 127.8.52.2 -u admin -p AHQSNFkiMs_a --db geo --type json --drop --collection cities < ~/app-root/repo/db/cities_pop_location.json
 
+You need to make sure that there is a 2D index on the column for latitude/longitude. To set this one, connect to mongo and call these commands:
 
+use geo
+db.cities.ensureIndex({loc : "2d" })

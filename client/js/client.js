@@ -168,7 +168,7 @@ app.sightsControl.markPosition = function(latitude, longitude) {
 };
 
 app.sightsControl.markSights = function(latitude, longitude) {
-	//app.config.set("webWorker", false);
+	// FOR TESTING app.config.set("webWorker", false);
 
 	var boundingBox = app.mapControl.getMapBoundingBox();
 
