@@ -7,6 +7,10 @@
     "type": "git",
     "url": "https://github.com/janpetzold/node-sights"
   },
+  "engines": {
+    "node": ">= 0.10.3",
+    "npm": ">= 1.0.0"
+  },
   "dependencies": {
     "express": "3.3.4",
     "geoip-lite": "1.0.10",
