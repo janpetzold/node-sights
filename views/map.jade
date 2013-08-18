@@ -5,14 +5,14 @@ html(lang="en")
     title="node-sights"
     meta(author="Jan Petzold")
     meta(description="Small node.js application that displays a map based on the users position and shows some sights that are around him/her")
-    meta(viewport="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
 
   body
 
     // placeholder for the actual map
     #map
 
-    // welcome message
+    // main text box
     #textBoxContainer
       #textBox
         span(id="welcomeMsg") #{msg}
@@ -20,6 +20,7 @@ html(lang="en")
     // loading indicator
     img(id="loadingIndicator", src="assets/images/loader.gif", width="110", height="110", alt="Loading data...", title="Loading data...")
 
+    // debug statistics
     #statistics
       p(class="stats") IP: 
         span(id="ipStatus") #{ip}
@@ -27,6 +28,8 @@ html(lang="en")
         span(id="geoStatus") unavailable
       p(class="stats") Webworker: 
         span(id="wwStatus") unavailable
+      p(class="stats") Zoom-Level: 
+        span(id="zoomStatus") 0
 
     link(rel='stylesheet', href='css/leaflet/leaflet.css')
     //if lte IE 8

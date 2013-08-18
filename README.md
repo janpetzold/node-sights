@@ -9,6 +9,15 @@ To get city names and population, you need to setup mongodb and download the dat
 
 mongoimport --host localhost --db geo --type json --drop --collection cities < cities_pop_location.json
 
+You do the same on a cloud provider like OpenShift, just modify the parameters accordingly:
+mongoimport --host XXX -u admin -p YYY --db geo --type json --drop --collection cities < ~/app-root/repo/db/cities_pop_location.json
+
+You need to make sure that there is a 2D index on the column for latitude/longitude. To set this one, connect to mongo and call these commands:
+
+use geo
+db.cities.ensureIndex({Location : "2d" })
+
+This will ensure that queries with the geo coordinates as parameter will deliver the city name and population very fast.
 
 
 
@@ -18,14 +27,6 @@ mongoimport --host localhost --db geo --type json --drop --collection cities < c
 
 
 
-
-To set this app up on Heroku, first download the Heroku toolbelt for your OS.
-
-OpenShift Mongo credentials:
-
-Root User: admin
-Root Password: AHQSNFkiMs_a
-Database Name: node
 
 Install rhc firs
 
@@ -40,6 +41,8 @@ rhc create-app nodesights nodejs-0.6 --from-code=https://github.com/janpetzold/n
 
 See some details:
 rhc show-app nodesights
+Restart the app:
+rhc app restart -a nodesights
 
 Afterwards, connect via SSH.
 
@@ -47,12 +50,9 @@ To find out host and port of mongo, run this command on the shell:
 
 env
 
-Than you'll know the address and port mongo works with.
-To import the data, run this:
 
-mongoimport --host 127.8.52.2 -u admin -p AHQSNFkiMs_a --db geo --type json --drop --collection cities < ~/app-root/repo/db/cities_pop_location.json
 
-You need to make sure that there is a 2D index on the column for latitude/longitude. To set this one, connect to mongo and call these commands:
 
-use geo
-db.cities.ensureIndex({loc : "2d" })
+
+Also helpful after SSH login:
+cd $OPENSHIFT_REPO_DIR

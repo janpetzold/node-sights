@@ -1,18 +1,51 @@
 body {
   padding: 0;
   margin: 0;
-  font: 100% Helvetica, Arial, sans-serif;
+  font: normal 100% Helvetica, Arial, sans-serif;
   text-align: center;
 }
 html,
 body,
 #map {
-  width: 100%;
   height: 100%;
+  padding: 0;
+  margin: 0;
+}
+@media screen and (min-width : 10px) and (max-width : 320px) {
+  body {
+    font-size: 30%;
+  }
+  #textBox {
+    max-width: 35%;
+  }
+}
+@media screen and (min-width : 320px) and (max-width : 480px) {
+  body {
+    font-size: 50%;
+  }
+  #textBox {
+    max-width: 50%;
+  }
+}
+@media screen and (min-width : 480px) and (max-width : 1000px) {
+  body {
+    font-size: 70%;
+  }
+  #textBox {
+    max-width: 65%;
+  }
+}
+@media only screen and (min-width: 1000px) {
+  body {
+    font-size: 100%;
+  }
+  #textBox {
+    max-width: 80%;
+  }
 }
 p.stats {
   display: inline;
-  font-size: 0.8em;
+  font-size: 0.65em;
   font-weight: bold;
 }
 p.stats span {
@@ -34,7 +67,6 @@ p.stats span {
 }
 #textBox {
   display: inline-block;
-  max-width: 80%;
   text-align: center;
   background-color: #eee;
   padding: 6px 16px 6px 16px;
@@ -56,8 +88,8 @@ p.stats span {
 #statistics {
   background-color: #dfdfdf;
   border: 1px solid #aaa;
-  border-radius: 4px;
-  padding: 4px;
+  border-radius: 3px;
+  padding: 3px;
   opacity: 0.75;
   position: absolute;
   text-align: right;
