@@ -7,19 +7,20 @@ After checkout, please run npm install to get all dependencies. Afterwards, load
 
 To get city names and population, you need to setup mongodb and download the dataset from /db/cities_pop_location.json. To do so, call the following command inside your mongo installation directory:
 
-mongoimport --host localhost --db geo --type json --drop --collection cities < cities_pop_location.json
+mongoimport --host localhost --db nodesights --type json --drop --collection cities < cities_pop_location.json
 
 You do the same on a cloud provider like OpenShift, just modify the parameters accordingly:
-mongoimport --host XXX -u admin -p YYY --db geo --type json --drop --collection cities < ~/app-root/repo/db/cities_pop_location.json
+mongoimport --host XXX -u admin -p YYY --db nodesights --type json --drop --collection cities < ~/app-root/repo/db/cities_pop_location.json
 
 You need to make sure that there is a 2D index on the column for latitude/longitude. To set this one, connect to mongo and call these commands:
 
-use geo
+use nodesights
 db.cities.ensureIndex({Location : "2d" })
 
 This will ensure that queries with the geo coordinates as parameter will deliver the city name and population very fast.
 
-
+To start/stop mongodb:
+rhc cartridge start mongodb-2.2 -a nodesights
 
 
 

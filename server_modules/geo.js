@@ -1,14 +1,50 @@
 var geoip = require('geoip-lite');
-var MongoClient = require('mongodb').MongoClient;
+var mongodb = require('mongodb');
 
-// setup db connect data - depends on dev/prod environment
-var dbHost = "127.0.0.1";
-var dbPort = "27017";
+function openDbConnection(callback) {
+	var dbHost = process.env.OPENSHIFT_MONGODB_DB_HOST || "127.0.0.1";
+	var dbPort = process.env.OPENSHIFT_MONGODB_DB_PORT || 27017;
+	var dbServer = new mongodb.Server(dbHost, parseInt(dbPort, 10));
 
-var mongoConnectString = "mongodb://" + dbHost + ":" + dbPort + "/geo";
+	var db = new mongodb.Db('nodesights', dbServer, {w: 1});
+	var dbUser = process.env.OPENSHIFT_MONGODB_DB_USERNAME;
+	var dbPass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD;
 
-if(typeof process.env.OPENSHIFT_MONGODB_DB_URL !== 'undefined') {
-	mongoConnectString = process.env.OPENSHIFT_MONGODB_DB_URL + "/geo";
+	db.open(function(err, db) {
+		if(!err) {
+			// use authentication on production system
+			if(process.env.OPENSHIFT_MONGODB_DB_USERNAME) {
+				db.authenticate(dbUser, dbPass, function(err, res) {
+					if(!err) {
+						console.log("Authenticated");
+						callback(db);
+					} else {
+						console.log("Authentication failed");
+						console.log(err);
+					}
+				});
+			} else {
+				callback(db);
+			}
+		} else {
+			console.log("Could not connect to database");
+			console.log(err);
+		}
+    });
+}
+
+function queryCities(db, latitude, longitude, callback) {
+	var query = {'Location' : {'$near' : [latitude, longitude]}};
+	var collection = db.collection('cities');
+
+	collection.find(query).sort({Population : -1}).limit(1).toArray(function(err, city) {
+		var result = {
+			name : city[0]['AccentCity'],
+			population : city[0]['Population']
+		};
+		db.close();
+		callback(result);
+	});
 }
 
 function getGeoCoordinates(req) {
@@ -31,24 +67,13 @@ function getCity(latitude, longitude, callback) {
 	latitude = parseFloat(latitude);
 	longitude = parseFloat(longitude);
 
-	MongoClient.connect(mongoConnectString, function(err, db) {
-		if(err) throw err;
-
-		console.log("Connection " + mongoConnectString + " successful, fetching city for lat " + latitude + " lon " + longitude);
-
-		// construct the query for the collection
-		var query = {'Location' : {'$near' : [latitude, longitude]}};
-		var collection = db.collection('cities');
-
-		collection.find(query).sort({Population : -1}).limit(1).toArray(function(err, city) {
-			var result = {
-				name : city[0]['AccentCity'],
-				population : city[0]['Population']
-			};
-			db.close();
-			callback(result);
-      });
-  });
+	openDbConnection(function(db) {
+		if(db) {
+			queryCities(db, latitude, longitude, function(result) {
+				callback(result);
+			});
+		}
+	});
 }
 
 exports.getGeoCoordinates = getGeoCoordinates;
