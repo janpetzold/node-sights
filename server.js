@@ -1,5 +1,4 @@
 var express = require('express');
-var routes = require('routes');
 var stylus = require('stylus');
 
 // load my controllers

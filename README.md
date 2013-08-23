@@ -3,6 +3,8 @@ node-sights
 
 node.js demo application for nearby sights
 
+Demo: app-nodesights.rhcloud.com
+
 After checkout, please run npm install to get all dependencies. Afterwards, load the files geoip-city.dat and geoip-city-names.dat from https://github.com/bluesmoon/node-geoip/tree/master/data and place them in the node_modules/geoip-lite/data folder.
 
 To get city names and population, you need to setup mongodb and download the dataset from /db/cities_pop_location.json. To do so, call the following command inside your mongo installation directory:
@@ -22,6 +24,11 @@ This will ensure that queries with the geo coordinates as parameter will deliver
 To start/stop mongodb:
 rhc cartridge start mongodb-2.2 -a nodesights
 
+Deploy the app:
+rhc app create nodesights nodejs --from-code=http://github.com/janpetzold/node-sights.git
+
+Remove the app:
+rhc app delete nodesights
 
 
 

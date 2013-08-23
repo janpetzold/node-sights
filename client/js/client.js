@@ -67,7 +67,7 @@ app.init = function() {
 	navigator.geolocation.getCurrentPosition(app.browserGeoControl.onLocationSuccess, app.browserGeoControl.onLocationError);
 
 	// start timeout to handle geo detection failure / deny of browser detection
-	var timeoutGeo = setTimeout("app.browserGeoControl.checkGeoPosition()", 3000);
+	window.setTimeout("app.browserGeoControl.checkGeoPosition()", 3000);
 
 	// initiate the map with OSM data
 	var map = L.map('map');
@@ -76,7 +76,7 @@ app.init = function() {
 	}).addTo(map);
 
 	// attach event listener to map (triggers whenever user changes position)
-	map.on('moveend', function (e) {
+	map.on('moveend', function () {
 		var latLng = app.mapControl.getCentralMapPosition();
 
 		// set zoom level
@@ -84,7 +84,7 @@ app.init = function() {
 
 		// don't do anything if the position has not changed that much
 		if(latLng[0] !== app.config.get("currentLatLng")[0] && latLng[1] !== app.config.get("currentLatLng")[1]) {
-			var timeoutPosition = setTimeout("app.mapControl.setMap(" + latLng[0] + "," + latLng[1] + ")", 1500);
+			window.setTimeout("app.mapControl.setMap(" + latLng[0] + "," + latLng[1] + ")", 1500);
 		}
 	});
 
@@ -177,7 +177,7 @@ app.sightsControl.markPosition = function(latitude, longitude) {
 };
 
 // set markers for all the "sights" around
-app.sightsControl.markSights = function(latitude, longitude) {
+app.sightsControl.markSights = function() {
 	app.sightsControl.indicateLoadingData();
 
 	if(app.config.get("sightsLayer")) {
@@ -197,7 +197,7 @@ app.sightsControl.markSights = function(latitude, longitude) {
 
 		worker.postMessage(boundingBox);
 	} else {
-		// fetch sights from server-side when there is no webworker support
+		// fetch sights from server-side when there is no WebWorker support
 		$.ajax({
 			type: "POST",
 			url: "/fetchSights",
@@ -214,9 +214,9 @@ app.sightsControl.markSightsInMap = function(sights) {
 	var allSights = [];
 
 	for (var item in sights) {
-		var sight = L.marker([sights[item].lat,sights[item].lon]);
-		sight.bindPopup(sights[item].name);
-		allSights.push(sight);
+        var sight = L.marker([sights[item].lat,sights[item].lon]);
+        sight.bindPopup(sights[item].name);
+        allSights.push(sight);
 	}
 	
 	var map = app.config.get("map");

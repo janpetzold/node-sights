@@ -14,7 +14,7 @@ function openDbConnection(callback) {
 		if(!err) {
 			// use authentication on production system
 			if(process.env.OPENSHIFT_MONGODB_DB_USERNAME) {
-				db.authenticate(dbUser, dbPass, function(err, res) {
+				db.authenticate(dbUser, dbPass, function(err) {
 					if(!err) {
 						console.log("Authenticated");
 						callback(db);
@@ -37,7 +37,7 @@ function queryCities(db, latitude, longitude, callback) {
 	var query = {'Location' : {'$near' : [latitude, longitude]}};
 	var collection = db.collection('cities');
 
-	collection.find(query).sort({Population : -1}).limit(1).toArray(function(err, city) {
+	collection.find(query).sort({'Population' : -1}).limit(1).toArray(function(err, city) {
 		var result = {
 			name : city[0]['AccentCity'],
 			population : city[0]['Population']

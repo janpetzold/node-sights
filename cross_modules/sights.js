@@ -1,5 +1,5 @@
 /**
- * This module my be used on client- and server-side. It initiates a Webworker which asynchronously fetches
+ * This module my be used on client- and server-side. It initiates a WebWorker which asynchronously fetches
  * sights data via Overpass API and returns that in JSON format inside an Array.
  */
 
@@ -22,16 +22,16 @@ function constructUrl(box) {
 	// use the following POI types - for details, see http://wiki.openstreetmap.org/wiki/Map_Features
 	var sightTypes = ["historic", "tourism", "amenity=theatre", "amenity=townhall", "amenity=marketplace", "amenity=place_of_worship", "shop=art", "shop=craft"];
 
-	// construct the URL based on the boundingBox (coordinates of the brwoser window)
+	// construct the URL based on the boundingBox (coordinates of the browser window)
 	var allGeoSights = "";
 	for(var type in sightTypes) {
-		allGeoSights = allGeoSights + "node[" + sightTypes[type] + "](" + box[0] + "," + box[1] + "," + box[2] + "," + box[3] +");";
-	}
+        allGeoSights = allGeoSights + "node[" + sightTypes[type] + "](" + box[0] + "," + box[1] + "," + box[2] + "," + box[3] + ");";
+    }
 	
 	return url.replace(":PLACEHOLDER", allGeoSights);
 }
 
-// start the Webworker from client
+// start the WebWorker from client
 function initClientWebWorker(e) {
 	// the parameter for the boundingBox is inside e.data
 	var sightsUrl = constructUrl(e.data);
@@ -48,7 +48,7 @@ function initClientWebWorker(e) {
 }
 
 // get the data from Overpass API via XHR
-// no chance to use any jQuery here because Webworkers have no DOM access
+// no chance to use any jQuery here because WebWorkers have no DOM access
 function fetchData(url, callback) {
 	var xhr;
 
@@ -96,7 +96,7 @@ function processResult(data) {
 	var elements = JSON.parse(data).elements;
 	
 	// iterate through the results
-	for(i = 0; i < elements.length; i++) {
+	for(var i = 0; i < elements.length; i++) {
 		// don't take any item without a name
 		if(elements[i].tags.name) {
 			// If there is an English name, take this one instead the default.
