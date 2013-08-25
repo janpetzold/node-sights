@@ -140,10 +140,9 @@ function compare(a,b) {
 	return 0;
 }
 
-// Defining "exports" is a little tricky if you want to work across browser / node.js
-// Following the hint on http://caolanmcmahon.com/posts/writing_for_node_and_the_browser
-(function(exports){
-	exports.constructUrl = constructUrl;
-	exports.fetchData = fetchData;
-	exports.processResult = processResult;
-})(typeof exports === 'undefined'? this['sights']={}: exports);
+// Define "exports" just for server-side
+if(typeof exports !== 'undefined') {
+    exports.constructUrl = constructUrl;
+    exports.fetchData = fetchData;
+    exports.processResult = processResult;
+}
