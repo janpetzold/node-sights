@@ -1,6 +1,7 @@
 var geoip = require('geoip-lite');
 var mongodb = require('mongodb');
 
+// Connect to the database and initiate the query on success
 function openDbConnection(callback) {
 	var dbHost = process.env.OPENSHIFT_MONGODB_DB_HOST || "127.0.0.1";
 	var dbPort = process.env.OPENSHIFT_MONGODB_DB_PORT || 27017;
@@ -33,6 +34,7 @@ function openDbConnection(callback) {
     });
 }
 
+// Execute the database query after the connection has been established
 function queryCities(db, latitude, longitude, callback) {
 	var query = {'Location' : {'$near' : [latitude, longitude]}};
 	var collection = db.collection('cities');
@@ -47,21 +49,22 @@ function queryCities(db, latitude, longitude, callback) {
 	});
 }
 
+// Get latitude/longitude for a given IP
 function getGeoCoordinates(req) {
 	var ip = req.ip;
-	
+
+    // This is just for local testing / debugging
 	if(req.ip === "127.0.0.1" || req.ip.split(".")[0] === "192") {
 		ip = "77.185.62.21";
 	}
 
-	console.log("Fetching the geo coordinates for IP " + ip);
-
 	var geo = geoip.lookup(ip);
 
-	console.log("Ser-detected Lat/Lng for IP is " + geo.ll);
+	console.log("Server detected Lat/Lng for IP " + ip + " is " + geo.ll);
 	return geo.ll;
 }
 
+// Retrieve the city metadata (name and population) by querying the database.
 function getCity(latitude, longitude, callback) {
 	// convert lat/lng to float
 	latitude = parseFloat(latitude);
