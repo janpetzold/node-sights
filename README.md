@@ -11,6 +11,18 @@ To get city names and population, you need to setup mongodb and download the dat
 
 mongoimport --host localhost --db nodesights --type json --drop --collection cities < cities_pop_location.json
 
+You can easily publish this app on any cloud service. As an example, here are the steps you need to get it running on the OpenShift platform:
+
+1. Install RHC (OpenShift command-line tools): https://www.openshift.com/developers/rhc-client-tools-install. Setup will guide you through authentication and generates an SSH key you'll need for remote administration.
+2. Create the app, we'll call it "app": rhc create-app nodesights nodejs-0.6
+3. Add a MongoDB "cartridge": rhc cartridge-add mongodb-2.2 --app app. Notice the username and password on the output - you'll need it later on.
+
+
+
+To publish nthe
+
+
+
 You do the same on a cloud provider like OpenShift, just modify the parameters accordingly:
 mongoimport --host XXX -u admin -p YYY --db nodesights --type json --drop --collection cities < ~/app-root/repo/db/cities_pop_location.json
 
