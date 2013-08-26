@@ -17,6 +17,16 @@ You can easily publish this app on any cloud service. As an example, here are th
 2. Create the app, we'll call it "app": rhc create-app nodesights nodejs-0.6
 3. Add a MongoDB "cartridge": rhc cartridge-add mongodb-2.2 --app app. Notice the username and password on the output - you'll need it later on.
 
+Publishing is a bit more complicated - we could easily publish by the OpenShift Git repo but we already have it on GitHub. Therefore, we first pull the OpenSShift repo, fix all differences and push it later on. To do that, log into the OpenShift web console and note the path to the Git repo. It will be something like ssh://123456@app-nodesights.rhcloud.com/~/git/app.git/. So here we go:
+
+1. Change into your base directory and pull the data from the OpenShift repo: git pull ssh://123456@app-nodesights.rhcloud.com/~/git/app.git/
+2. Merge all changes - it won't be much.
+3. Push the result to OpenShift: git push ssh://12345@app-nodesights.rhcloud.com/~/git/app.git/ master
+
+You can follow the installation in the console after that.
+
+You usual GitHub workflow (git pull / git push origin master) won't be affected.
+
 
 
 To publish nthe
