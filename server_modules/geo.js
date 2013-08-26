@@ -6,7 +6,7 @@ function openDbConnection(callback) {
 	var dbPort = process.env.OPENSHIFT_MONGODB_DB_PORT || 27017;
 	var dbServer = new mongodb.Server(dbHost, parseInt(dbPort, 10));
 
-	var db = new mongodb.Db('nodesights', dbServer, {w: 1});
+	var db = new mongodb.Db('app', dbServer, {w: 1});
 	var dbUser = process.env.OPENSHIFT_MONGODB_DB_USERNAME;
 	var dbPass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD;
 
