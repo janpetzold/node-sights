@@ -54,7 +54,7 @@ app.init = function() {
 		app.config.set("geoLocation", false);
 	}
 
-	// check for Webworker support
+	// check for WebWorker support
 	if(window.Worker) {
 		app.config.set("webWorker", true);
 		$("#wwStatus").text("available");
@@ -121,7 +121,7 @@ app.mapControl.setMap = function(latitude, longitude) {
 
 		// just fetch sights below a certain zoom level
 		if(app.config.get("map").getZoom() > 12) {
-			app.sightsControl.markSights(latitude, longitude);
+			app.sightsControl.markSights();
 		}
 	}
 };
@@ -184,14 +184,14 @@ app.sightsControl.markSights = function() {
 		app.config.get("map").removeLayer(app.config.get("sightsLayer"));
 	}
 
-	var boundingBox = app.mapControl.getMapBoundingBox();
+    var boundingBox = app.mapControl.getMapBoundingBox();
 
-	// if Webworkers are supported, use them - otherwise fetch sights via server
+	// if WebWorkers are supported, use them - otherwise fetch sights via server
 	if(app.config.get("webWorker")) {
-		// Initialize the Webworker
+		// Initialize the WebWorker
 		var worker = new Worker('./sights.js');
 
-		// add event listener to Webworker
+		// add event listener to WebWorker
 		worker.addEventListener('message', app.webworkerSightsControl.onMsg, false);
 		worker.addEventListener('error', app.webworkerSightsControl.onError, false);
 
@@ -268,12 +268,12 @@ app.browserGeoControl.onLocationError = function() {
 	});
 };
 
-// error in Webworker
+// error in WebWorker
 app.webworkerSightsControl.onError = function(e) {
 	console.log("Error line " + e.lineno + " in " + e.filename + ", line #" + e.lineno + " Message: " + e.message);
 };
 
-// Webworker finished work and returns an array of sights
+// WebWorker finished work and returns an array of sights
 app.webworkerSightsControl.onMsg = function(e) {
 	app.sightsControl.markSightsInMap(e.data);
 };

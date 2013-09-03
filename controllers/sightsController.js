@@ -10,10 +10,10 @@ exports.getSights = function(req, res){
   console.log("Fetching the sights from server - bounding box is " + boundingBox);
 
   // build the service-URL based on the boundingBox
-  var serviceUrl = sights.constructUrl(boundingBox);
+  var serviceUrl = sights.constructOverpassUrl(boundingBox);
 
   sights.fetchData(serviceUrl, function(xhr) {
-	var result = sights.processResult(xhr.responseText);
+	var result = sights.processOverpassResult(xhr.responseText);
 	res.send(result);
   });
 };

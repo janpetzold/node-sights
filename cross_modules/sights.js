@@ -8,19 +8,16 @@ if(typeof process !== 'undefined') {
 	console.log("Using sights module with node.js in version " + process.version);
 	var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 } else {
-	// Client-side webworker - initiate and listen for messages (=parameters)
+	// Client-side WebWorker - initiate and listen for messages (=parameters)
 	self.addEventListener('message', initClientWebWorker, false);
 }
 
 // build the URL for the API to fetch the sights data
-function constructUrl(box) {
+function constructOverpassUrl(box) {
 	var url = "http://overpass-api.de/api/interpreter?data=[out:json];(:PLACEHOLDER);out;";
 
-	// TEST - for Google Places:
-	// https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyBjqseHE6gwDD348QWsuDkK279U8xU92Ew&location=52.51533619021745,13.380210399627686&radius=500&sensor=false&language=en&types=art_gallery|museum|church|city_hall|mosque|park|stadium|zoo|establishment
-
 	// use the following POI types - for details, see http://wiki.openstreetmap.org/wiki/Map_Features
-	var sightTypes = ["historic", "tourism", "amenity=theatre", "amenity=townhall", "amenity=marketplace", "amenity=place_of_worship", "shop=art", "shop=craft"];
+	var sightTypes = ["tourism=museum", "tourism=artwork", "tourism=viewpoint", "tourism=attraction", "tourism=zoo", "leisure=park", "leisure=stadium", "historic=castle", "historic=city_gate", "historic=fort", "historic=monument", "leisure=beach_resort", "amenity=theatre", "amenity=townhall", "amenity=marketplace", "amenity=place_of_worship"];
 
 	// construct the URL based on the boundingBox (coordinates of the browser window)
 	var allGeoSights = "";
@@ -33,13 +30,13 @@ function constructUrl(box) {
 
 // start the WebWorker from client
 function initClientWebWorker(e) {
-	// the parameter for the boundingBox is inside e.data
-	var sightsUrl = constructUrl(e.data);
+	// the parameter for latitude/longitude is inside e.data
+	var sightsUrl = constructOverpassUrl(e.data);
 
 	// now get the sights data
 	fetchData(sightsUrl, function(xhr) {
 		// process the response to get the 30 most important sights around
-		var result = processResult(xhr.responseText);
+		var result = processOverpassResult(xhr.responseText);
 		self.postMessage(result);
 
 		// Close the worker
@@ -69,7 +66,6 @@ function fetchData(url, callback) {
 		catch(e){}
 			}
 		}
-
 	xhr.onreadystatechange = ensureReadiness;
 
 	function ensureReadiness() {
@@ -90,7 +86,7 @@ function fetchData(url, callback) {
 }
 
 // order the results by relevance and limit the amount to 30
-function processResult(data) {
+function processOverpassResult(data) {
 	var result = [];
 	
 	var elements = JSON.parse(data).elements;
@@ -105,10 +101,7 @@ function processResult(data) {
 			}
 
 			// measure relevance by the amount of tags for the current item
-			var relevance = 0;
-			for(var t in elements[i].tags) {
-				relevance++;
-			}
+			var relevance = elements[i].tags.length;
 
 			// construct a new item based on the Overpass API JSON data
 			var item = {
@@ -142,7 +135,7 @@ function compare(a,b) {
 
 // Define "exports" just for server-side
 if(typeof exports !== 'undefined') {
-    exports.constructUrl = constructUrl;
+    exports.constructOverpassUrl = constructOverpassUrl;
     exports.fetchData = fetchData;
-    exports.processResult = processResult;
+    exports.processOverpassResult = processOverpassResult;
 }
